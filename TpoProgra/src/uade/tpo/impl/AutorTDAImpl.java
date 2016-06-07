@@ -4,56 +4,110 @@ import uade.tpo.tda.AutorTDA;
 import uade.tpo.tda.LibrosAutorTDA;
 
 public class AutorTDAImpl implements AutorTDA {
-
+	private Autor raiz;
+	
 	public void Inicializar() {
-		// TODO Auto-generated method stub
-		
+		raiz=null;
 	}
 
 	public void Agregar(String nombreAutor) {
-		// TODO Auto-generated method stub
+		if(raiz==null){
+			raiz= new Autor();
+			raiz.setNombre(nombreAutor);
+			raiz.setLibrosAutor= new LibrosAutorTDAImpl();
+			raiz.getLibrosAutor= Inicializar(); //????????
+			raiz.setHi=new AutorTDAImpl();
+			raiz.setHd= new AutorTDAImpl();
+			raiz.getHi=Inicializar();
+			raiz.getHd=Inicializar();
+			raiz=Autor;
+		}else{
+			if (raiz.getNombre().compareTo(nombreAutor) > 0) {
+				raiz.getHi().Agregar(nombreAutor);
+			} else {
+				raiz.getHd().Agregar(nombreAutor);
+			}
+		}
 		
-	}
-
-	public boolean AutorPertenece(String nombreAutor) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public AutorTDA HijoIzquierdo() {
-		// TODO Auto-generated method stub
-		return null;
+		return raiz.getHi();
 	}
 
 	public AutorTDA HijoDerecho() {
-		// TODO Auto-generated method stub
-		return null;
+		return raiz.getHd();
 	}
 
 	public void Eliminar(String nombreAutor) {
-		// TODO Auto-generated method stub
+		if(raiz!=null){
+			if(raiz.getNombre().equals(nombreAutor) && raiz.getHi.ArbolVacio() && raiz.getHd.ArbolVacio()){
+				raiz=null;
+			}else{
+				if(raiz.getNombre().equals(nombreAutor) && !raiz.getHd.ArbolVacio()){
+					raiz=Mayor(raiz.getHi);
+					raiz.getHi.Eliminar(raiz.getNombre());
+				}else{
+					if(raiz.getNombre().equals(nombreAutor) && !raiz.getHd.ArbolVacio()){
+						raiz=Menor(raiz.getHd);
+						raiz.getHd.Eliminar(raiz.getNombre());
+					}else{
+						if(raiz.getNombre().compareTo(nombreAutor)>0){
+							raiz.getHi.Eliminar(nombreAutor);
+						}else{
+							raiz.getHd.Eliminar(nombreAutor);
+						}
+					}
+				}
+			}
+		}
 		
+	}
+	private Autor Mayor(AutorTDA autor){
+		if(autor.HijoDerecho().ArbolVacio()){
+			return autor.Raiz();
+		}else{
+			return Mayor(autor.HijoDerecho());
+		}
+	}
+	private Autor Menor(AutorTDA autor){
+		if(autor.HijoIzquierdo().ArbolVacio()){
+			return autor.Raiz();
+		}else{
+			return Menor(autor.HijoIzquierdo());
+		}
 	}
 
 	public String Raiz() {
-		// TODO Auto-generated method stub
-		return null;
+		return raiz.getNombre;
 	}
 
 	public boolean AutorVacio() {
-		// TODO Auto-generated method stub
-		return false;
+		return raiz==null;
 	}
 
-	public void AgregarLibro(String nombreAutor, String tituloLibro,
-			float precio) {
-		// TODO Auto-generated method stub
-		
+	public void AgregarLibro(String nombreAutor, String tituloLibro,float precio) {
+		Autor aux= BuscarAutor(raiz, nombreAutor);
+		aux.LibrosAutor.Agregar(tituloLibro, precio); //El autor tenia que existir.
+	}
+	private AutorTDA BuscarAutor(AutorTDA raiz, String nombreAutor){
+		Autor aux=raiz;
+		if(aux!=null){
+			if(aux.getNombre().equals(nombreAutor)){
+				return aux;
+			}else{
+				if(aux.getNombre().compareTo(nombreAutor)>0){
+					Buscar(aux.Hijoizquierdo(), nombreAutor());
+				}else{
+					Buscar(aux.HijoDerecho(), nombreAutor());
+				}
+			}
+		}
 	}
 
 	public LibrosAutorTDA GetLibros(String nombreAutor) {
-		// TODO Auto-generated method stub
-		return null;
+		Autor aux=BuscarAutor(raiz, nombreAutor);  //Como el autor tiene que existir no lo chequeo.
+		return aux.getLibrosAutor;  	//No me acuerdo como estaba el nombre del arbol de libros
 	}
 
 }
